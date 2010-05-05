@@ -7,7 +7,7 @@ module Globalize2
     end
     
     def find_page_with_globalize(url)
-      globalized_url = '/' + I18n.locale + '/' + url
+      globalized_url = '/' + I18n.locale.to_s + '/' + url
       find_page_without_globalize(globalized_url)
     end
   end

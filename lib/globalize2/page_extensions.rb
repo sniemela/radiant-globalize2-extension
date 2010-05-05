@@ -10,7 +10,7 @@ module Globalize2
         alias_method_chain 'tag:link', :globalize
         alias_method_chain 'tag:children:each', :globalize
         alias_method_chain :url, :globalize
-        alias_method_chain :update_globalize_record, :reset
+        alias_method_chain :save_translations!, :reset
         
         def self.scope_locale(locale, &block)
           with_scope(:find => { :joins => "INNER JOIN page_translations on page_translations.page_id = pages.id", :conditions => ['page_translations.locale = ?', locale] }) do
@@ -48,11 +48,11 @@ module Globalize2
       
     end
 
-    def update_globalize_record_with_reset
-      if reset_translations && I18n.locale != Globalize2Extension.default_language
-        self.globalize_translations.find_by_locale(I18n.locale).destroy
+    def save_translations_with_reset!
+      if reset_translations && I18n.locale.to_s != Globalize2Extension.default_language
+        self.globalize_translations.find_by_locale(I18n.locale.to_s).destroy
         parts.each do |part|
-          part.globalize_translations.find_by_locale(I18n.locale).destroy
+          part.globalize_translations.find_by_locale(I18n.locale.to_s).destroy
         end
       else
         update_globalize_record_without_reset
@@ -61,7 +61,7 @@ module Globalize2
     
     def url_with_globalize
       unless parent
-        '/' + I18n.locale + url_without_globalize
+        '/' + I18n.locale.to_s + url_without_globalize
       else
         url_without_globalize
       end

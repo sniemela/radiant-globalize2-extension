@@ -4,4 +4,4 @@
   .index
     %span
     - Globalize2Extension.locales.map do |locale|
-      = link_to_unless(I18n.locale == locale, "<img src='/images/admin/#{locale.downcase}.gif' alt='#{locale.upcase}' />", params.merge(:locale => locale))
+      = link_to_unless(I18n.locale.to_s.to_s.to_s.to_s == locale, "<img src='/images/admin/#{locale.downcase}.gif' alt='#{locale.upcase}' />", params.merge(:locale => locale))

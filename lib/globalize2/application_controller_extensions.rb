@@ -16,7 +16,7 @@ module Globalize2
       end
       
       def reset_locale
-        unless I18n.locale == Globalize2Extension.default_language
+        unless I18n.locale.to_s == Globalize2Extension.default_language
           locale = Globalize2Extension.default_language
           session[:locale] = locale
           I18n.locale = locale
