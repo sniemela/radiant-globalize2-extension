@@ -26,7 +26,7 @@ end
 
 Then /^the "([^\"]*)" page should contain "([^\"]*)" for "([^\"]*)" locale$/ do |title, content, locale|
   page = Page.find_by_title(title)
-  page.parts.first.globalize_translations.find_by_locale(locale).content.should == content
+  page.parts.first.translations.find_by_locale(locale).content.should == content
 end
 
 Given /^a layout "([^\"]*)" exists$/ do |name|
@@ -40,7 +40,7 @@ end
 
 Then /^the "([^\"]*)" layout should contain "([^\"]*)" for "([^\"]*)" locale$/ do |name, content, locale|
   layout = Layout.find_by_name(name)
-  layout.globalize_translations.find_by_locale(locale).content.should == content
+  layout.translations.find_by_locale(locale).content.should == content
 end
 
 Given /^a snippet "([^\"]*)" exists$/ do |name|
@@ -54,5 +54,5 @@ end
 
 Then /^the "([^\"]*)" snippet should contain "([^\"]*)" for "([^\"]*)" locale$/ do |name, content, locale|
   snippet = Snippet.find_by_name(name)
-  snippet.globalize_translations.find_by_locale(locale).content.should == content
+  snippet.translations.find_by_locale(locale).content.should == content
 end

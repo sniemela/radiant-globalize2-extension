@@ -4,7 +4,7 @@ describe Admin::PagesController do
   dataset :users
   
   before(:each) do
-    login_as :developer
+    login_as :admin
     
     I18n.default_locale = "en"
     @home_page = Factory.create(:page, :title => "Home Page", :slug => "/")
@@ -14,8 +14,8 @@ describe Admin::PagesController do
     switch_locale("ro") do
       get :new, :page_id => @home_page.id
       response.should be_success
-      session[:locale].should == "en"
-      I18n.locale.should == "en"
+      session[:locale].should == 'en'
+      I18n.locale.should == :en
     end
   end
   

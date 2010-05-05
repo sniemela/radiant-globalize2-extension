@@ -18,10 +18,11 @@ module Globalize2
     tag 'children:each_with_globalize' do |tag|
       with_translated_locales = tag.attr['locale'] == 'false' ? false : true
       if with_translated_locales
-        result = Page.scope_locale(I18n.locale) do
+        result = Page.scope_locale(I18n.locale.to_s) do
           send('tag:children:each_without_globalize', tag)
         end
       else
+        
         result = send('tag:children:each_without_globalize', tag)
       end
       result

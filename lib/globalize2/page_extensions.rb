@@ -6,6 +6,10 @@ module Globalize2
       base.reflections[:children].options[:order] = 'pages.virtual DESC'
       
       base.class_eval do
+        def self.locale
+          I18n.locale
+        end
+        
         attr_accessor :reset_translations
         alias_method_chain 'tag:link', :globalize
         alias_method_chain 'tag:children:each', :globalize
@@ -22,12 +26,11 @@ module Globalize2
     
     def unique_slug      
       options = {
-        "pages.parent_id = ?" => parent_id,
-        "page_translations.slug = ?" => slug,
-        "page_translations.locale = ?" => self.class.locale,
-        "page_translations.page_id <> ?" => id
+        "pages.parent_id = ?" => self.parent_id,
+        "page_translations.slug = ?" => self.slug,
+        "page_translations.locale = ?" => self.class.locale.to_s,
+        "page_translations.page_id <> ?" => self.id
       }
-      
       conditions_str = []
       conditions_arg = []
       
@@ -41,7 +44,6 @@ module Globalize2
       end
       
       conditions = [conditions_str.join(" AND "), *conditions_arg]
-      
       if self.class.find(:first, :joins => "INNER JOIN page_translations on page_translations.page_id = pages.id", :conditions => conditions )
         errors.add('slug', "must be unique")
       end
@@ -50,12 +52,12 @@ module Globalize2
 
     def save_translations_with_reset!
       if reset_translations && I18n.locale.to_s != Globalize2Extension.default_language
-        self.globalize_translations.find_by_locale(I18n.locale.to_s).destroy
+        self.translations.find_by_locale(I18n.locale.to_s).destroy
         parts.each do |part|
-          part.globalize_translations.find_by_locale(I18n.locale.to_s).destroy
+          part.translations.find_by_locale(I18n.locale.to_s).destroy
         end
       else
-        update_globalize_record_without_reset
+        save_translations_without_reset!
       end
     end
     
@@ -69,8 +71,8 @@ module Globalize2
     
     def clone
       new_page = super
-      globalize_translations.each do |t|
-        new_page.globalize_translations << t.clone
+      translations.each do |t|
+        new_page.translations << t.clone
       end
       new_page
     end

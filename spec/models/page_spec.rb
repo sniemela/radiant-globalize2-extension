@@ -20,7 +20,7 @@ describe Page do
   describe "validate unique_slug" do
     before(:each) do
       @parent = Factory.create(:page)
-      @child = Factory.create(:page, :parent => @parent, :title => "Child Page")
+      @child = Factory.create(:page, :parent => @parent, :title => "Child Page", :slug=>"child-page")
       @another = Factory.create(:page, :parent => @parent)
     end
     
@@ -39,12 +39,14 @@ describe Page do
     it "does not require slug to be unique outside the scope of parent" do
       lambda do
         page = create_page(:parent => @another, :slug => "child-page")
+        page.valid?
         page.errors.on(:slug).should be_nil
       end.should change(Page, :count).by(1)
     end
     
-    it "does not require slug to be unique outsiez the scope of locale" do
-      switch_locale("ro") do
+    it "does not require slug to be unique outside the scope of locale" do
+      @child.save!
+      switch_locale(:ro) do
         lambda do
           page = create_page(:parent => @parent, :slug => "child-page")
           page.errors.on(:slug).should be_nil
@@ -53,9 +55,12 @@ describe Page do
     end
     
     it "requires slug to be unique within the scope of parent and locale" do
+      @parent.save!
       lambda do
-        page = create_page(:parent => @parent, :slug => "child-page")
-        page.errors.on(:slug).should == "must be unique"
+        switch_locale(:en) do
+          page = create_page(:parent => @parent, :title=>"Child Page", :slug => "child-page")
+          page.errors.on(:slug).should == "must be unique"
+        end
       end.should_not change(Page, :count)
     end
   end

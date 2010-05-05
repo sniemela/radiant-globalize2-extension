@@ -16,6 +16,7 @@ Dataset::Resolver.default << (File.dirname(__FILE__) + "/datasets")
 if File.directory?(File.dirname(__FILE__) + "/matchers")
   Dir[File.dirname(__FILE__) + "/matchers/*.rb"].each {|file| require file }
 end
+I18n.locale = :en
 
 Spec::Runner.configure do |config|
   def switch_locale(locale)

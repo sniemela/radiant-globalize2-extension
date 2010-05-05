@@ -4,7 +4,7 @@ Factory.define(:page) do |f|
   f.breadcrumb { |a| a.title }
 end
 
-Factory.define(:romanian_page_translation, :class => "page_translation", :parent => :page) do |f|
+Factory.define(:romanian_page_translation, :class => Page::Translation, :parent => :page) do |f|
   f.locale "ro"
   f.association :page, :factory => :page
   f.title "Pagina Cool"
@@ -16,8 +16,8 @@ Factory.define(:page_part) do |f|
   f.content "english content"
 end
 
-Factory.define(:romanian_page_part_translation, :class => "page_part_translation") do |f|
-  f.locale "ro"
+Factory.define(:romanian_page_part_translation, :class => PagePart::Translation) do |f|
+  f.locale :ro
   f.association :page_part, :factory => :page_part
   f.content "continut romanesc"
 end

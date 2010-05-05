@@ -7,7 +7,7 @@ module Globalize2::Compatibility
     tag 'paginate_with_globalize' do |tag|
       with_translated_locales = tag.attr['locale'] == 'false' ? false : true
       if with_translated_locales
-        result = Page.scope_locale(I18n.locale) do
+        result = Page.scope_locale(I18n.locale.to_s) do
           send('tag:paginate_without_globalize', tag)
         end
       else

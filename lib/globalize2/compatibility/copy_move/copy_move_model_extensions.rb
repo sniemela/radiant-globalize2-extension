@@ -6,8 +6,8 @@ module Globalize2::Compatibility
     
         def copy_to(parent, status = nil)
           parent.children.build(copiable_attributes.symbolize_keys.merge(new_slug_and_title_under(parent))).tap do |new_page|
-            self.globalize_translations.each do |gt|
-              new_page.globalize_translations << gt.clone
+            self.translations.each do |gt|
+              new_page.translations << gt.clone
             end
             self.parts.each do |part|
               new_page.parts << part.clone
