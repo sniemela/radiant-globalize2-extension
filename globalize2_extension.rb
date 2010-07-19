@@ -26,6 +26,9 @@ class Globalize2Extension < Radiant::Extension
   end
   
   def activate
+    require 'i18n/backend/fallbacks'
+    I18n::Backend::Simple.send(:include, I18n::Backend::Fallbacks)
+
     admin.page.edit.add :form, 'admin/shared/change_locale', :before => 'edit_page_parts'
     admin.snippet.edit.add :form, 'admin/shared/change_locale', :before => 'edit_content'
     admin.layout.edit.add :form, 'admin/shared/change_locale', :before => 'edit_content'

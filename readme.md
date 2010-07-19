@@ -6,7 +6,7 @@ About
 
 An extension by [Aissac][aissac] that helps translating content in [Radiant CMS][radiant] using the Globalize2 Rails Plugin.
 
-Requires Radiant >= 0.8. Tested on Radiant 0.9 RC1.
+Requires Radiant >= 0.8. Tested on Radiant 0.9.1.
 
 Check out a screencast [presenting the extension][rcp] and one on [compatibility issues][rcc]
 
