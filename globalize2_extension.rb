@@ -5,12 +5,7 @@ class Globalize2Extension < Radiant::Extension
   version "0.1"
   description "Translate content in Radiant CMS using the Globalize2 Rails plugin."
   url "http://blog.aissac.ro/radiant/globalize2-extension/"
-  
-  define_routes do |map|
-    map.connect '/:locale/*url', :controller => 'site', :action => 'show_page',
-      :locale => Regexp.compile(locales.join("|"))
-  end
-  
+
   GLOBALIZABLE_CONTENT = {
     Page     => [:title, :slug, :breadcrumb, :description, :keywords],
     PagePart => [:content],
