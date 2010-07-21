@@ -66,7 +66,7 @@ module Globalize2
       result = []
       codes = tag.attr["codes"].split("|").each do |code|
         hash[:code] = code
-        if I18n.locale == code
+        if I18n.locale.to_s == code
           result << (hash[:active] || hash[:normal]).call
         else
           switch_locale(code) do
