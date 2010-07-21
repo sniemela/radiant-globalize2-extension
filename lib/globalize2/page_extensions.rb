@@ -17,7 +17,7 @@ module Globalize2
         alias_method_chain :save_translations!, :reset
         
         def self.scope_locale(locale, &block)
-          with_scope(:find => { :joins => "INNER JOIN page_translations on page_translations.page_id = pages.id", :conditions => ['page_translations.locale = ?', locale] }) do
+          with_scope(:find => { :joins => "INNER JOIN page_translations ptrls ON ptrls.page_id = pages.id", :conditions => ['ptrls.locale = ?', locale] }) do
             yield
           end
         end
@@ -27,9 +27,9 @@ module Globalize2
     def unique_slug      
       options = {
         "pages.parent_id = ?" => self.parent_id,
-        "page_translations.slug = ?" => self.slug,
-        "page_translations.locale = ?" => self.class.locale.to_s,
-        "page_translations.page_id <> ?" => self.id
+        "ptrls.slug = ?" => self.slug,
+        "ptrls.locale = ?" => self.class.locale.to_s,
+        "ptrls.page_id <> ?" => self.id
       }
       conditions_str = []
       conditions_arg = []
@@ -39,12 +39,12 @@ module Globalize2
           conditions_str << key
           conditions_arg << value
         else
-          conditions_str << "page_translations.page_id IS NOT NULL"
+          conditions_str << "ptrls.page_id IS NOT NULL"
         end
       end
       
       conditions = [conditions_str.join(" AND "), *conditions_arg]
-      if self.class.find(:first, :joins => "INNER JOIN page_translations on page_translations.page_id = pages.id", :conditions => conditions )
+      if self.class.find(:first, :joins => "INNER JOIN page_translations ptrls ON ptrls.page_id = pages.id", :conditions => conditions )
         errors.add('slug', "must be unique")
       end
       
