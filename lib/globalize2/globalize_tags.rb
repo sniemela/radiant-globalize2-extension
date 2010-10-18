@@ -111,12 +111,24 @@ module Globalize2
       Renders the containing elements if the page's title is translated. This doesn't necessarily mean the content (page parts) are translated.
       
       *Usage:*
-      
+
       <pre><code><r:if_translation_title>...</r:if_translation_title></code></pre>
     }
     tag 'if_translation_title' do |tag|
       page = tag.locals.page
       tag.expand if page.translated_locales.include?(I18n.locale.to_sym)
+    end
+
+    desc %{
+      Renders the containing elements if conditions are met.
+
+      *Usage:*
+
+      <pre><code><r:if_locale code="en">...</r:if_locale></code></pre>
+    }
+    tag 'if_locale' do |tag|
+      locale = tag.attr['code']
+      tag.expand if I18n.locale.to_sym == locale.to_s.to_sym
     end
   
     desc %{
